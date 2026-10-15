@@ -638,6 +638,9 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 .ccexprow select,.ccexprow input{flex:1;min-width:0;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:7px 9px;color:var(--ink);font-family:inherit;font-size:.78rem}
 .ccexprow input[type=date]{color-scheme:dark}
 .ccexpmsg{font-size:.72rem;color:var(--sub);margin-top:8px;min-height:1em}
+.ccprevbar{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:65;display:none;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;background:rgba(20,32,60,.96);border:1px solid var(--gold);border-radius:999px;padding:8px 10px 8px 18px;font-size:.78rem;color:var(--ink);box-shadow:0 8px 28px rgba(0,0,0,.45);max-width:calc(100vw - 32px)}
+.ccprevbar .mini.on{border-color:var(--gold);color:var(--gold)}
+.ccprevbar .mini.gold{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
 .ccchk{font-size:.7rem;color:var(--sub);margin-left:10px;white-space:nowrap}
 @media(max-width:820px){.ccrow{grid-template-columns:1fr 1fr 1fr;font-size:.72rem}.ccrow>span:nth-child(1),.ccrow>span:nth-child(4),.ccrow>span:nth-child(6){display:none}.ccrow .ccacts{grid-column:1/-1;justify-content:flex-start}}
 </style></head>
@@ -648,7 +651,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
   <div class="gatecard">
     <div class="gbrand">시대에듀 법무사 · 케길반</div>
     <div class="gsub">합격까지 함께하는 24h 관리 동반자 · 수강생 로그인</div>
-    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-15 · 빌드 36 · 서버 careclass</div>
+    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-15 · 빌드 37 · 서버 careclass</div>
     <div id="gLogin">
       <label class="gl2">아이디</label>
       <input id="fId" type="text" placeholder="발급받은 아이디" maxlength="60" autocomplete="username" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('fPw').focus()">
@@ -691,6 +694,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
       <div class="brand">시대에듀 법무사 · 케길반 <small>관리자 대시보드 · 운영 관제</small></div>
       <div class="userchip" style="display:flex">
         <span><b style="color:var(--ink)">관리자</b> · 시대에듀 온라인운영팀</span>
+        <button class="mini" style="border-color:var(--gold);color:var(--gold)" onclick="ccAdminPreview('2차')">👀 수강생 화면 보기</button>
         <button class="mini" style="border-color:var(--gold);color:var(--gold)" onclick="openEngine('admin')">🖥 운영 관제실 열기</button>
         <button class="mini" onclick="adminLogout()">나가기</button>
       </div>
@@ -923,7 +927,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 
   <footer>
     본 화면은 수험생이 로그인하면 실제로 맞닥뜨리는 운영 화면입니다. 표시된 수강생·수치는 실제 데이터가 아닌 예시값이며, 엔진(자가진단·강의매칭·선택형)은 실제 구동되는 검증 자산입니다.<br>
-    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-15 · 빌드 36 · 서버 careclass
+    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-15 · 빌드 37 · 서버 careclass
   </footer>
 </div>
 
@@ -1465,6 +1469,7 @@ function applyPlanLocks(){
   if(fab){fab.innerHTML=single?'🔒<span class="fabl">AI 조교 (케길반)</span>':'💬<span class="fabl">AI 조교</span>';}
 }
 async function logout(){
+  if(window.ccPreview){ await adminLogout(); return; }
   try{ ccRoomStop(); await ccRoomLeave(); }catch(e){}
   try{ ccSaveState(); await ccFlush(); }catch(e){}
   ccUid=null; ccWipe();
@@ -1621,6 +1626,9 @@ async function ccOpenAdmin(){
 }
 async function adminLogout(){
   document.getElementById("adminView").classList.remove("open");
+  window.ccPreview=false; { const b=document.getElementById("ccPrevBar"); if(b) b.style.display="none"; }
+  if(user){ user=null; document.getElementById("userchip").style.display="none"; const f=document.getElementById("fab"); if(f) f.style.display="none"; }
+  document.getElementById("gate").classList.remove("hidden"); try{ ccGateMode("gLogin"); }catch(e){}
   window.adminAuthed=false; try{ ccChatStop(); ccRoomStop(); }catch(e){}
   ccApps=[]; ccProfiles=[]; ccStates={};
   const box=document.getElementById("ccIssued"); if(box) box.innerHTML="";
@@ -1891,6 +1899,33 @@ async function ccGrant(i){
   const j=adminList.findIndex(function(y){ return y.pf.id===id; }); if(j>=0) openStudent(j);
 }
 
+/* ── 관리자: 수강생 화면 미리보기 (관리자 권한 그대로 · 진도 저장 안 함 · 강의실 자리에 앉지 않음) ── */
+function ccAdminPreview(track){
+  if(!window.adminAuthed) return;
+  window.ccPreview=true;
+  document.getElementById("adminView").classList.remove("open");
+  try{ ccChatStop(); }catch(e){}
+  ccUid=null;
+  applyUser({name:"관리자", type:"관리자", round:"미리보기", track:track||"2차", plan:"full"});
+  document.getElementById("uinfo").innerHTML='<b>관리자</b> · 수강생 화면 미리보기';
+  let bar=document.getElementById("ccPrevBar");
+  if(!bar){ bar=document.createElement("div"); bar.id="ccPrevBar"; bar.className="ccprevbar"; document.body.appendChild(bar); }
+  bar.innerHTML='<span>👀 <b>관리자 미리보기</b> · 수강생 화면 · 진도 저장 안 됨</span>'+
+    '<button class="mini'+(TRACK==="1차"?" on":"")+'" onclick="ccAdminPreview(\'1차\')">1차 화면</button>'+
+    '<button class="mini'+(TRACK==="2차"?" on":"")+'" onclick="ccAdminPreview(\'2차\')">2차 화면</button>'+
+    '<button class="mini gold" onclick="ccAdminBack()">🖥 대시보드로</button>';
+  bar.style.display="flex";
+  try{ ccChatStart("admin","ccChatStu"); }catch(e){}
+}
+function ccAdminBack(){
+  window.ccPreview=false;
+  const bar=document.getElementById("ccPrevBar"); if(bar) bar.style.display="none";
+  try{ closeEngine(); }catch(e){}
+  try{ ccChatStop(); }catch(e){}
+  const av=document.getElementById("adminView"); av.classList.add("open");
+  try{ ccChatStart("admin","ccChatAdm"); ccRoomWatch("admin"); }catch(e){}
+}
+
 /* ── 케길반 채팅방: 실시간 · 귓속말(수강생) · 강퇴/공지(관리자) ── */
 const ccChat={msgs:[],ids:{},lastId:0,ch:null,poll:null,tick:0,rtOk:false,mode:null,to:null,myId:null,banned:false,sending:false};
 function ccChatHTML(mode){
@@ -1913,6 +1948,7 @@ async function ccChatStart(mode,hostId){
   const host=document.getElementById(hostId); if(!host||!sb) return;
   ccChatStop();
   ccChat.mode=mode; ccChat.msgs=[]; ccChat.ids={}; ccChat.lastId=0; ccChat.to=null; ccChat.banned=false; ccChat.rtOk=false;
+  ["ccChatStu","ccChatAdm"].forEach(function(id){ if(id!==hostId){ const o=document.getElementById(id); if(o) o.innerHTML=""; } });
   host.innerHTML=ccChatHTML(mode);
   try{ const r=await sb.auth.getSession(); ccChat.myId=r&&r.data&&r.data.session?r.data.session.user.id:null; }catch(e){ ccChat.myId=null; }
   if(!ccChat.myId) return;
@@ -2158,6 +2194,7 @@ function crInit(){ ccRoom.list=[]; ccRoom.me=null; ccRoomDraw(); }
 function crStartSim(){ /* 예시 인원 시뮬레이션은 쓰지 않음 — 실제 접속자만 표시 */ }
 async function crEnterMe(){
   if(!sb||!user) return;
+  if(window.ccPreview){ ccRoom.me=null; ccRoomWatch("admin"); const lg=document.getElementById("crLog"); if(lg) lg.textContent="관리자 미리보기 — 자리에 앉지 않고 전체 반을 봅니다"; return; }
   try{
     const r=await sb.rpc("cc_room_enter"); if(r.error) throw r.error;
     const row=Array.isArray(r.data)?r.data[0]:r.data;
@@ -2220,7 +2257,7 @@ async function ccRoomLoad(){
   if(ccRoom.me&&myId&&user&&!ccRoom.list.some(function(x){ return x.user_id===myId; }))
     ccRoom.list.push({user_id:myId,cls:ccRoom.me.cls,seat:ccRoom.me.seat,name:ccMaskName(user.name)});
   const lg=document.getElementById("crLog");
-  if(lg) lg.textContent=ccRoom.err?ccRoom.err:(ccRoom.me?"나는 "+ccRoom.me.cls+"반 "+ccRoom.me.seat+"번 자리 ★":"");
+  if(lg) lg.textContent=ccRoom.err?ccRoom.err:(ccRoom.me?"나는 "+ccRoom.me.cls+"반 "+ccRoom.me.seat+"번 자리 ★":(window.ccPreview?"관리자 미리보기 — 자리에 앉지 않고 전체 반을 봅니다":""));
   ccRoomDraw(); try{ ccChatPeople(); }catch(e){}
 }
 function ccRoomView(c){ ccRoom.view=c; ccRoomDraw(); }
