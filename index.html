@@ -670,6 +670,14 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 .cgrip{display:flex;gap:4px;margin:0 8px 0 auto}
 .cgrip button{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--sub);border-radius:7px;width:28px;height:26px;font-size:.7rem;cursor:pointer}
 .cgrip button:hover{border-color:var(--gold);color:var(--gold)}
+.fab{display:none!important}
+.qatop{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:999px;padding:8px 16px;cursor:pointer;
+  background:linear-gradient(135deg,#f0c94a,#c9a227);color:var(--navy);font-family:'Noto Sans KR';font-weight:800;font-size:.82rem;
+  box-shadow:0 0 0 1px rgba(255,255,255,.18) inset,0 6px 18px rgba(201,162,39,.35);white-space:nowrap;transition:.15s}
+.qatop small{font-weight:600;font-size:.64rem;opacity:.75;background:rgba(13,31,60,.12);border-radius:999px;padding:1px 7px}
+.qatop:hover{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 8px 24px rgba(201,162,39,.5)}
+.enghead .qatop{margin-left:auto}.enghead .qatop+.engback{margin-left:8px}
+.chat{top:76px;bottom:auto}
 .ccplanbar{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:6px 0 14px;padding:12px 16px;border:1px solid var(--gold);border-radius:12px;background:rgba(232,185,60,.07);font-size:.8rem;color:var(--sub)}
 .ccplanbar .pbt{font-weight:800;color:var(--gold)}
 .ccplanbar .pbv b{color:var(--ink);font-size:.95rem}
@@ -688,7 +696,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
   <div class="gatecard">
     <div class="gbrand">시대에듀 법무사 · 케길반</div>
     <div class="gsub">합격까지 함께하는 24h 관리 동반자 · 수강생 로그인</div>
-    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-16 · 빌드 46 · 서버 careclass</div>
+    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-16 · 빌드 47 · 서버 careclass</div>
     <div id="gLogin">
       <label class="gl2">아이디</label>
       <input id="fId" type="text" placeholder="발급받은 아이디" maxlength="60" autocomplete="username" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('fPw').focus()">
@@ -848,6 +856,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 <button class="mini" onclick="pickTeukgang()">🎓 특강</button>
 </div>
     <div class="userchip" id="userchip" style="display:none">
+      <button class="qatop" onclick="toggleChat()">💬 무시로 질의응답 <small>24시간</small></button>
       <span id="uinfo"></span>
       <span class="ubadge">케길반</span>
       <button class="mini" onclick="logout()">로그아웃</button>
@@ -964,7 +973,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 
   <footer>
     본 화면은 수험생이 로그인하면 실제로 맞닥뜨리는 운영 화면입니다. 표시된 수강생·수치는 실제 데이터가 아닌 예시값이며, 엔진(자가진단·강의매칭·선택형)은 실제 구동되는 검증 자산입니다.<br>
-    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-16 · 빌드 46 · 서버 careclass
+    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-16 · 빌드 47 · 서버 careclass
   </footer>
 </div>
 
@@ -2797,7 +2806,7 @@ function ccTopStats(){
     var g=document.createElement("span"); g.className="cgrip";
     g.innerHTML='<button type="button" title="맨 위로" onclick="ccChatMove(\'up\')">▲</button><button type="button" title="맨 아래로" onclick="ccChatMove(\'down\')">▼</button>';
     var last=head.lastElementChild; head.insertBefore(g,last);
-    var sub=head.querySelector(".chsub"); if(sub) sub.textContent=sub.textContent+" · 머리를 끌면 위아래로 옮겨집니다";
+    var sub=head.querySelector(".chsub"); if(sub) sub.textContent="24시간 즉문즉답 · 끌어서 위아래 이동"; head.title="잡고 끌면 위아래로 옮겨집니다";
     var dragging=false, startY=0, startTop=0;
     head.addEventListener("pointerdown",function(e){
       if(e.target.closest("button")) return;
@@ -3078,6 +3087,7 @@ async function askAI(){
 </div>
 <div class="engview" id="engview">
   <div class="enghead"><b>시대에듀 법무사 · 케길반</b><span class="et" id="engtitle"></span>
+    <button class="qatop" onclick="toggleChat()">💬 무시로 질의응답 <small>24시간</small></button>
     <button class="engback" onclick="engBack()">← 내 화면으로 돌아가기</button></div>
   <iframe id="engframe" title="엔진"></iframe>
 </div>
