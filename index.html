@@ -670,6 +670,8 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 .cgrip{display:flex;gap:4px;margin:0 8px 0 auto}
 .cgrip button{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--sub);border-radius:7px;width:28px;height:26px;font-size:.7rem;cursor:pointer}
 .cgrip button:hover{border-color:var(--gold);color:var(--gold)}
+.gforgot{display:block;text-align:center;margin:10px 0 2px;font-size:.76rem;color:var(--sub);text-decoration:underline;text-underline-offset:3px}
+.gforgot:hover{color:var(--gold)}
 .fab{display:none!important}
 .qatop{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:999px;padding:8px 16px;cursor:pointer;
   background:linear-gradient(135deg,#f0c94a,#c9a227);color:var(--navy);font-family:'Noto Sans KR';font-weight:800;font-size:.82rem;
@@ -696,7 +698,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
   <div class="gatecard">
     <div class="gbrand">시대에듀 법무사 · 케길반</div>
     <div class="gsub">합격까지 함께하는 24h 관리 동반자 · 수강생 로그인</div>
-    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-16 · 빌드 47 · 서버 careclass</div>
+    <div style="font-size:10.5px;color:#8a8578;margin-top:4px;letter-spacing:.5px">BUILD v2026-10-16 · 빌드 48 · 서버 careclass</div>
     <div id="gLogin">
       <label class="gl2">아이디</label>
       <input id="fId" type="text" placeholder="발급받은 아이디" maxlength="60" autocomplete="username" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('fPw').focus()">
@@ -704,8 +706,26 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
       <input id="fPw" type="password" placeholder="비밀번호" autocomplete="current-password" onkeydown="if(event.key==='Enter')ccLogin()">
       <div class="gerr" id="gerr"></div>
       <button class="btn gbtn" onclick="ccLogin()">로그인 →</button>
+      <a href="#" class="gforgot" onclick="ccForgotOpen();return false">비밀번호를 잊으셨나요?</a>
       <button class="quickbtn" onclick="openUpgrade()">⭐ 처음 오셨나요? 케길반 신청하기 →</button>
       <div class="gsample">신청 → 시대에듀에서 결제 → 결제가 확인되면 <b>아이디와 임시 비밀번호를 문자로</b> 보내 드립니다</div>
+    </div>
+    <div id="gForgot" style="display:none">
+      <div id="fgForm">
+        <div class="gsample" style="font-size:.78rem;color:var(--ink);margin-top:16px;text-align:left">비밀번호를 잊으셨나요? 아래를 보내 주시면 <b>등록된 정보를 확인한 뒤</b> 새 임시 비밀번호를 <b>등록된 전화번호로 문자</b> 보내 드립니다.</div>
+        <label class="gl2">아이디</label>
+        <input id="fgId" type="text" maxlength="40" autocapitalize="off" spellcheck="false" autocomplete="username">
+        <label class="gl2">이름</label>
+        <input id="fgName" type="text" maxlength="20" autocomplete="name">
+        <label class="gl2">등록한 전화번호</label>
+        <input id="fgPhone" type="tel" maxlength="20" placeholder="010-0000-0000" autocomplete="tel" onkeydown="if(event.key==='Enter')ccForgotSend()">
+        <div class="gerr" id="gerr3"></div>
+        <button class="btn gbtn" onclick="ccForgotSend()">재발급 요청 보내기 →</button>
+      </div>
+      <div id="fgDone" style="display:none;margin-top:16px;padding:14px;border:1px solid var(--gold);border-radius:10px;background:rgba(232,185,60,.08);font-size:.82rem;line-height:1.7;color:var(--ink)">
+        ✅ <b>요청을 받았습니다.</b><br>등록된 정보와 맞으면 확인 후 <b>등록된 전화번호로 임시 비밀번호를 문자</b>로 보내 드립니다. 문자를 받으면 그 비밀번호로 로그인한 뒤 새 비밀번호로 바꿔 주세요.
+      </div>
+      <a href="#" class="gforgot" onclick="ccForgotBack();return false">← 로그인으로 돌아가기</a>
     </div>
     <div id="gPw" style="display:none">
       <div class="gsample" style="font-size:.78rem;color:var(--ink);margin-top:16px">처음 로그인하셨습니다 — 임시 비밀번호를 <b>앞으로 쓸 비밀번호</b>로 바꿔 주세요.</div>
@@ -973,7 +993,7 @@ border-radius:999px;padding:4px 12px;font-size:.7rem;cursor:pointer;font-family:
 
   <footer>
     본 화면은 수험생이 로그인하면 실제로 맞닥뜨리는 운영 화면입니다. 표시된 수강생·수치는 실제 데이터가 아닌 예시값이며, 엔진(자가진단·강의매칭·선택형)은 실제 구동되는 검증 자산입니다.<br>
-    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-16 · 빌드 47 · 서버 careclass
+    시대에듀 법무사 · 케길반 · 제안 자료 · 2026. 8. · BUILD v2026-10-16 · 빌드 48 · 서버 careclass
   </footer>
 </div>
 
@@ -1315,7 +1335,7 @@ function ccErr(e){
   if(/duplicate key|cc_profiles_login_id/i.test(m)) return "이미 쓰이는 아이디입니다";
   return m;
 }
-function ccGateMode(m){ ["gLogin","gPw"].forEach(function(id){ const el=document.getElementById(id); if(el) el.style.display=(id===m)?"block":"none"; }); }
+function ccGateMode(m){ ["gLogin","gPw","gForgot"].forEach(function(id){ const el=document.getElementById(id); if(el) el.style.display=(id===m)?"block":"none"; }); }
 
 /* ── 학습 진도: 이 기기 저장 ↔ 서버(cc_progress) ── */
 let ccUid=null, ccPend={}, ccTimer=null, ccMute=false, ccLastState="";
@@ -1530,6 +1550,32 @@ function ccWdNotice(pf){
     '그동안의 학습 기록(진도·답안·채팅)은 <b>'+d+'</b>에 삭제됩니다. 삭제일 전에 재신청하시면 기록을 이어서 쓰실 수 있습니다.'+
     '<div style="margin-top:10px"><button class="quickbtn" style="margin:0" onclick="openUpgrade()">⭐ 케길반 재신청하기 →</button></div></div>';
 }
+
+/* 비밀번호를 잊었을 때: 요청만 남기고(비밀번호는 바뀌지 않음) 관리자가 전화번호를 확인해 재발급 */
+function ccForgotOpen(){
+  ccGateMode("gForgot");
+  const id=(document.getElementById("fId").value||"").trim(); if(id) document.getElementById("fgId").value=id;
+  document.getElementById("gerr3").textContent=""; document.getElementById("fgDone").style.display="none"; document.getElementById("fgForm").style.display="block";
+  setTimeout(function(){ const i=document.getElementById(id?"fgName":"fgId"); if(i) i.focus(); },50);
+}
+function ccForgotBack(){ ccGateMode("gLogin"); document.getElementById("gerr").textContent=""; }
+async function ccForgotSend(){
+  const id=(document.getElementById("fgId").value||"").trim().toLowerCase();
+  const nm=(document.getElementById("fgName").value||"").trim();
+  const ph=(document.getElementById("fgPhone").value||"").replace(/[^0-9]/g,"");
+  const err=document.getElementById("gerr3");
+  if(!id||!nm||!ph){ err.textContent="아이디·이름·전화번호를 모두 넣어 주세요."; return; }
+  if(id.length>40||nm.length>20){ err.textContent="입력값을 확인해 주세요."; return; }
+  if(ph.length<9||ph.length>11){ err.textContent="전화번호를 숫자로 정확히 넣어 주세요."; return; }
+  if(!sb){ err.textContent="서버 연결 모듈을 불러오지 못했습니다 — 새로고침해 주세요"; return; }
+  err.textContent="보내는 중…";
+  try{
+    const r=await sb.from("cc_pw_requests").insert({login_id:id,name:nm,phone:ph});
+    if(r.error) throw r.error;
+    err.textContent="";
+    document.getElementById("fgForm").style.display="none"; document.getElementById("fgDone").style.display="block";
+  }catch(e){ err.textContent=ccErr(e); }
+}
 function closeUpgrade(){document.getElementById("upmodal").classList.remove("open");}
 function applyPlanLocks(){
   const single=isSingle();
@@ -1622,7 +1668,7 @@ function toggleAdminForm(){
   const f=document.getElementById("adminForm");
   const open=f.style.display==="none";
   f.style.display=open?"block":"none";
-  if(open){var i=document.getElementById("fAdmin");if(i)setTimeout(function(){i.focus();},50);}
+  if(open){var i=document.getElementById("fAdmin");if(i)i.focus();}
 }
 async function adminLogin(){
   const code=(document.getElementById("fAdmin").value||"").trim();
@@ -1665,11 +1711,13 @@ async function adminLogout(){
 }
 
 /* ── 관리자: 서버 데이터 ── */
-let ccApps=[], ccProfiles=[], ccStates={}, ccSubs=[], ccLearn={}, ccIq={};
+let ccApps=[], ccProfiles=[], ccStates={}, ccSubs=[], ccLearn={}, ccIq={}, ccPwReq=[];
 async function ccLoadAdmin(keepIssued){
   if(!sb) return;
   const tbl=document.getElementById("ccApps"); if(tbl&&!ccApps.length) tbl.innerHTML='<div class="sub">불러오는 중…</div>';
-  try{ const pg=await sb.rpc("cc_purge_withdrawn"); if(!pg.error&&pg.data>0) toast("보관 기한이 지난 퇴원생 "+pg.data+"명의 기록을 삭제했습니다"); }catch(e){}
+  const soft=function(q){ return Promise.resolve(q).then(function(r){ return r; },function(e){ return {error:e}; }); };
+  const purgeP=soft(sb.rpc("cc_purge_withdrawn"));   /* 보관 기한이 지난 퇴원생 기록 삭제 (함께 진행) */
+  const pwP=soft(sb.from("cc_pw_requests").select("*").order("created_at",{ascending:false}).limit(200));
   try{
     const res=await Promise.all([
       sb.from("cc_applications").select("*").order("created_at",{ascending:false}).limit(1000),
@@ -1687,7 +1735,9 @@ async function ccLoadAdmin(keepIssued){
     ccSubs=res[3].data||[];
   }catch(e){ toast("관리자 자료를 불러오지 못했습니다 — "+ccErr(e)); }
   if(!keepIssued){ const box=document.getElementById("ccIssued"); if(box) box.innerHTML=""; }
-  ccRenderApps(); ccRenderSubs(); renderAdmin(); try{ ccBanListRender(); }catch(e){}
+  const pr=await pwP; ccPwReq=(pr&&!pr.error&&pr.data)||[];
+  ccRenderApps(); ccRenderSubs(); renderAdmin(); try{ ccRenderPwReq(); }catch(e){ console.warn(e); } try{ ccBanListRender(); }catch(e){}
+  purgeP.then(function(pg){ if(pg&&!pg.error&&pg.data>0){ toast("보관 기한이 지난 퇴원생 "+pg.data+"명의 기록을 삭제했습니다"); if(!window.__ccPurgeReload){ window.__ccPurgeReload=1; ccLoadAdmin(true).finally(function(){ window.__ccPurgeReload=0; }); } } });
 }
 function ccEsc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function ccDate(t){ if(!t) return "—"; const d=new Date(t); return (d.getMonth()+1)+"/"+d.getDate()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
@@ -2062,6 +2112,57 @@ async function ccPurgeNow(uid){
   if(r.error){ alert("삭제하지 못했습니다 — "+ccErr(r.error)); return; }
   toast((p.name||p.login_id)+"님의 기록을 삭제했습니다");
   await ccLoadAdmin(true);
+}
+
+/* ── 비밀번호 재발급 요청: 등록 정보와 대조 → [재발급] → 문자 안내문 ── */
+function ccDigits(x){ return String(x||"").replace(/[^0-9]/g,""); }
+function ccRenderPwReq(){
+  let el=document.getElementById("ccPwReq");
+  if(!el){ const ap=document.getElementById("ccAppPanel"); if(!ap) return;
+    const pn=document.createElement("div"); pn.className="panel"; pn.style.marginTop="22px"; pn.id="ccPwReqPanel";
+    pn.innerHTML='<h3>🔑 비밀번호 재발급 요청 <span id="ccPwReqN" style="color:var(--gold);font-size:.9rem"></span></h3>'+
+      '<div class="sub">수강생이 로그인 화면 [비밀번호를 잊으셨나요?]로 보낸 요청입니다 · 요청만으로는 비밀번호가 바뀌지 않습니다 · <b style="color:var(--gold)">등록 정보와 맞는지</b> 확인하고 [재발급]을 누르면 문자 안내문이 만들어집니다'+
+      '<label class="ccchk"><input type="checkbox" id="ccPwReqAll" onchange="ccRenderPwReq()"> 처리 끝난 요청도 보기</label></div>'+
+      '<div class="atable" id="ccPwReq"></div><div id="ccPwIssued"></div>';
+    ap.after(pn); el=document.getElementById("ccPwReq"); }
+  const all=!!(document.getElementById("ccPwReqAll")||{}).checked;
+  const wait=ccPwReq.filter(function(q){ return q.status==="대기"; });
+  const nEl=document.getElementById("ccPwReqN"); if(nEl) nEl.textContent=wait.length?("대기 "+wait.length+"건"):"";
+  const rows=ccPwReq.filter(function(q){ return all||q.status==="대기"; });
+  el.innerHTML=rows.length?
+    '<div class="arow2 head"><span>요청 시각</span><span>아이디</span><span>이름</span><span>전화</span><span>등록 정보와 대조</span><span></span></div>'+
+    rows.map(function(q){
+      const p=ccProfiles.find(function(x){ return x.login_id===String(q.login_id||"").toLowerCase(); });
+      let chk, ok=false;
+      if(!p) chk='<span style="color:#ff9b9b">없는 아이디</span>';
+      else if(p.withdrawn_at) chk='<span style="color:#ff9b9b">퇴원생 — 재신청이면 [복귀]로</span>';
+      else { const nOk=(p.name||"").trim()===String(q.name||"").trim(), pOk=ccDigits(p.phone)===ccDigits(q.phone); ok=nOk&&pOk;
+        chk=(ok?'<span style="color:#5ec98f">✅ 이름·전화 일치</span>':'<span style="color:#ffb347">⚠ '+(nOk?"":"이름 ")+(pOk?"":"전화 ")+'불일치</span>')+' <small style="color:var(--mute)">(등록 '+ccEsc(p.name||"")+' · '+ccEsc(p.phone||"")+')</small>'; }
+      const act=q.status!=="대기"?'<span style="color:var(--mute)">'+ccEsc(q.status)+' · '+ccDate(q.handled_at)+'</span>':
+        ('<span class="ccacts">'+(p&&!p.withdrawn_at?'<button class="mini" style="border-color:var(--gold);color:var(--gold)" onclick="ccPwReqIssue('+q.id+')">🔑 재발급</button>':'')+
+         '<button class="mini" onclick="ccPwReqClose('+q.id+',\'반려\')">반려</button></span>');
+      return '<div class="arow2"><span>'+ccDate(q.created_at)+'</span><span class="nm2">'+ccEsc(q.login_id)+'</span><span>'+ccEsc(q.name)+'</span><span>'+ccEsc(q.phone)+'</span><span>'+chk+'</span>'+act+'</div>';
+    }).join(""):'<div class="empty-log">'+(all?"재발급 요청이 없습니다.":"처리할 재발급 요청이 없습니다.")+'</div>';
+}
+async function ccPwReqClose(id,st){
+  const r=await sb.from("cc_pw_requests").update({status:st,handled_at:new Date().toISOString()}).eq("id",id);
+  if(r.error){ alert("처리하지 못했습니다 — "+ccErr(r.error)); return false; }
+  const q=ccPwReq.find(function(x){ return x.id===id; }); if(q){ q.status=st; q.handled_at=new Date().toISOString(); }
+  ccRenderPwReq(); return true;
+}
+async function ccPwReqIssue(id){
+  const q=ccPwReq.find(function(x){ return x.id===id; }); if(!q) return;
+  const p=ccProfiles.find(function(x){ return x.login_id===String(q.login_id||"").toLowerCase(); }); if(!p) return;
+  const ok=(p.name||"").trim()===String(q.name||"").trim()&&ccDigits(p.phone)===ccDigits(q.phone);
+  if(!confirm((ok?"":"⚠ 요청한 이름·전화번호가 등록 정보와 다릅니다. 본인 확인을 마쳤을 때만 진행하세요.\n\n")+
+    (p.name||p.login_id)+" ("+p.login_id+")님 비밀번호를 새로 발급할까요?\n안내문은 등록된 번호 "+(p.phone||"")+"로 보내 주세요.")) return;
+  const pw=ccNewPw();
+  const r=await sb.rpc("cc_reset_password",{p_user:p.id,p_pw:pw});
+  if(r.error){ alert("재발급하지 못했습니다 — "+ccErr(r.error)); return; }
+  p.must_change_pw=true;
+  await ccPwReqClose(id,"처리완료");
+  ccShowIssued("ccPwIssued",p.name||p.login_id,p.phone,p.login_id,pw,"재발급");
+  const box=document.getElementById("ccPwIssued"); if(box&&box.scrollIntoView) box.scrollIntoView({block:"center"});
 }
 
 /* ── 케길반 채팅방: 실시간 · 귓속말(수강생) · 강퇴/공지(관리자) ── */
